@@ -161,3 +161,9 @@ VideoEnabled {
         message("Skipping support for video streaming (Unsupported platform)")
     }
 }
+
+HEADERS += \
+    $$PWD/KLVDecoder.h
+
+SOURCES += \
+    $$PWD/KLVDecoder.cpp
