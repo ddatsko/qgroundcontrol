@@ -1718,15 +1718,8 @@ GstFlowReturn GstVideoReceiver::_onNewMedatada(GstElement *sink, gpointer user_d
         {
             GstMapInfo map;
             gst_buffer_map(gstBuffer, &map, GST_MAP_READ);
-
-            qCDebug(VideoReceiverLog) << "KLV packet received";
             auto metadata = KLVMetadata(map.data, map.size);
             auto allValues = metadata.getAllMetadata();
-
-            auto timestamp = metadata.getTimestamp();
-            if (timestamp.has_value()) {
-                qCDebug(VideoReceiverLog) << "Timestamp: " << timestamp.value();
-            }
 
             // Emit the signal with newly received metadata
             pThis->_dispatchSignal([&]() {
