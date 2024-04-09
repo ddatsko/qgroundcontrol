@@ -5,6 +5,7 @@ on:
     branches:
       - 'master'
       - 'Stable*'
+      - 'klv_synchronization'
     tags:
       - 'v*'
     paths-ignore:
