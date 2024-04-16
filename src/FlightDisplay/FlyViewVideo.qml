@@ -122,8 +122,12 @@ Item {
             if (mouse.button == Qt.RightButton) {
                 // If mode reached the highest value, put it back to zero
                 currentScaleMode = (currentScaleMode + 1) % numScaleModes;
+                return;
             }
 
+            if (!videoStreaming._camera || !videoStreaming._camera.trackingEnabled) {
+                return;
+            }
 
             let x0 = Math.floor(Math.max(0, targetCanvas.rectCenterX - targetCanvas.rectWidth / 2));
             let y0 = Math.floor(Math.max(0, targetCanvas.rectCenterY - targetCanvas.rectHeight / 2));
@@ -149,8 +153,8 @@ Item {
 
             //use point message if rectangle is very small
             if (targetCanvas.rectWidth < 10 && targetCanvas.rectHeight < 10) {
-                let pt  = Qt.point((rec_start_x + x1) / 2, (y0 + y1) / 2)
-                videoStreaming._camera.startTracking(pt, radius / videoStreaming.getWidth())
+                let pt  = Qt.point(targetCanvas.rectCenterX, targetCanvas.rectCenterY)
+                videoStreaming._camera.startTracking(pt, targetCanvas.rectWidth / 2);
             } else {
                 let latestFrameTimestamp = QGroundControl.videoManager.lastKlvTimestamp;
                 console.log("Latest timestamp in js: " + latestFrameTimestamp);
@@ -167,10 +171,10 @@ Item {
             console.log(wheel)
             console.log(wheel.angleDelta)
             if (currentScaleMode == scaleModeHorizontal || currentScaleMode == scaleModeBoth) {
-                targetCanvas.rectWidth += Math.floor(Number( wheel.angleDelta.y) / WHEEL_DIVIDER);
+                targetCanvas.rectWidth = Math.max(0, targetCanvas.rectWidth + Math.floor(Number( wheel.angleDelta.y) / WHEEL_DIVIDER));
             }
             if (currentScaleMode == scaleModeVertical || currentScaleMode == scaleModeBoth) {
-                targetCanvas.rectHeight += Math.floor(Number( wheel.angleDelta.y) / WHEEL_DIVIDER);
+                targetCanvas.rectHeight = Math.max(0, targetCanvas.rectHeight + Math.floor(Number( wheel.angleDelta.y) / WHEEL_DIVIDER));
             }
 
             targetCanvas.requestPaint();
