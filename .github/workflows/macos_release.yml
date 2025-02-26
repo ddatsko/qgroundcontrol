@@ -5,7 +5,6 @@ on:
     branches:
       - 'master'
       - 'Stable*'
-      - 'feature/macos_build'
     tags:
       - 'v*'
     paths-ignore:
